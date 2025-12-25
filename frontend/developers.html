@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers - Nero Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-code: #0d1117;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --accent-purple: #6366f1;
+            --accent-green: #3fb950;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-purple);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .main-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .deployment-steps {
+            margin-top: 3rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-purple), #ec4899);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Code Block */
+        .code-window {
+            background: var(--bg-code);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .code-content {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            color: var(--text-secondary);
+        }
+
+        .code-comment {
+            color: #6e7681;
+        }
+
+        .code-tag {
+            color: #7ee787;
+        }
+
+        .code-attr {
+            color: #79c0ff;
+        }
+
+        .code-string {
+            color: #a5d6ff;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--border-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .doc-link {
+            display: block;
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .doc-link:hover {
+            text-decoration: underline;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="sdk.html">Live SDK</a></li>
+                <li><a href="developers.html" class="active">Developers</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="header-section">
+            <div class="version-badge">SDK V1.0.4-BETA</div>
+            <h1>DEVELOPER CORE</h1>
+            <p class="subtitle">
+                Integrate Nero's AI-Native Sentinel into your dApp. Provide real-time MoveVM guidance while earning protocol revenue through x402 micro-streams.
+            </p>
+        </div>
+
+        <div class="content-grid">
+            <div class="main-content">
+                <h2>Integration Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>VISUAL BRANDING</h3>
+                        <p>Customize colors, icons, and position to fit seamlessly into your dApp's existing UI components.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>MONETIZATION ENGINE</h3>
+                        <p>Set custom MOVE/USDC fees per query. All payments settle instantly via the x402 protocol.</p>
+                    </div>
+                </div>
+
+                <div class="deployment-steps">
+                    <h2>DEPLOYMENT STEPS</h2>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>CLAIM PLATFORM ID</h3>
+                            <p>Register your project in the Admin Dashboard to receive your unique platform key.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>DEFINE AI PERSONA</h3>
+                            <p>Provide your project docs or smart contract ABIs to specialize your Nero Agent.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>MOUNT COMPONENT</h3>
+                            <p>Use our React SDK or simple HTML snippet to activate the live guide.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-window" style="position: relative;">
+                    <button class="copy-btn" onclick="copyCode()">COPY SNIPPET</button>
+                    <div class="code-header">
+                        <div class="code-tab">HTML SNIPPET</div>
+                        <div class="code-tab" style="opacity: 0.5;">REACT SDK</div>
+                        <div class="code-tab" style="opacity: 0.5;">FULL JSON CONFIG</div>
+                    </div>
+                    <div class="code-content">
+<pre><code><span class="code-comment">&lt;!-- 1. Add the Nero Sentinel script --&gt;</span>
+<span class="code-tag">&lt;script</span>
+  <span class="code-attr">src</span>=<span class="code-string">"https://cdn.nero.ai/widget/v1.js"</span>
+  <span class="code-attr">data-platform-id</span>=<span class="code-string">"nero_demo_0921"</span>
+  <span class="code-attr">data-theme</span>=<span class="code-string">"light"</span>
+  <span class="code-attr">data-primary-color</span>=<span class="code-string">"#4f46e5"</span>
+  <span class="code-attr">async</span>
+<span class="code-tag">&gt;&lt;/script&gt;</span>
+
+<span class="code-comment">&lt;!-- 2. The widget will automatically attach to your page --&gt;</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-card">
+                    <h3>🚀 TECHNICAL REFERENCE</h3>
+                    <p>FULL API SPECS AVAILABLE</p>
+                    <a href="#" class="doc-link">VIEW DOCS →</a>
+                </div>
+
+                <div class="info-card">
+                    <h3>
+                        <span class="status-dot"></span>
+                        MOVEMENT M2 ACTIVE
+                    </h3>
+                    <p>Windows 전용 인증<br>[설정]으로 이동하여 Windows 를 켜주 인증합니다.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>💡 Need Help?</h3>
+                    <p>Join our developer community or reach out to our technical support team.</p>
+                    <a href="#" class="doc-link">Join Discord →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCode() {
+            const code = `<script
+  src="https://cdn.nero.ai/widget/v1.js"
+  data-platform-id="nero_demo_0921"
+  data-theme="light"
+  data-primary-color="#4f46e5"
+  async
+><\/script>`;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'COPIED!';
+                setTimeout(() => {
+                    btn.textContent = 'COPY SNIPPET';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

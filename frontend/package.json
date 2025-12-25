@@ -1,0 +1,12 @@
+{
+  "name": "nero-protocol-frontend",
+  "version": "1.0.4",
+  "description": "Nero Protocol - AI-Powered Web3 Companion Frontend",
+  "scripts": {
+    "build": "echo 'No build step required for static HTML'",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nero Protocol - AI-Powered Web3 Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #141414;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-purple: #6366f1;
+            --accent-pink: #ec4899;
+            --accent-blue: #3b82f6;
+            --border-color: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .balance {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 2rem 100px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '●';
+            font-size: 0.6rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--accent-purple);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            margin-top: 80px;
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.8s backwards;
+        }
+
+        .mockup-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mockup-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .mockup-content {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 3rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="#overview" class="active">Overview</a></li>
+                <li><a href="sdk.html">Live SDK</a></li>
+                <li><a href="developers.html">Developers</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div class="wallet-info">
+                <span class="balance">0.150 MOVE</span>
+                <button class="cta-button" onclick="window.location.href='sdk.html'">Get Started</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-badge">
+                NEXT GEN WEB3 ONBOARDING
+            </div>
+            
+            <h1>
+                The AI companion<br>
+                for<br>
+                <span class="gradient-text">Movement Native<br>Apps.</span>
+            </h1>
+            
+            <p>
+                Nero enables developers to embed AI-native guidance into any dApp. 
+                Reduce friction, maximize retention, and monetize expertise with real-time value streams.
+            </p>
+            
+            <div class="hero-buttons">
+                <button class="primary-btn" onclick="window.location.href='sdk.html'">Explore the SDK</button>
+                <button class="secondary-btn" onclick="window.location.href='developers.html'">Read the Docs</button>
+            </div>
+
+            <div class="hero-visual">
+                <div class="mockup-container">
+                    <div class="mockup-content">
+                        <img src="https://placehold.co/1000x500/1a1a1a/6366f1?text=Nero+Sentinel+Demo" alt="Nero Demo" style="width: 100%; border-radius: 12px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

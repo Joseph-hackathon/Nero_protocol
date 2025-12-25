@@ -1,0 +1,367 @@
+/* NeroWidget.css - Styles for Nero Protocol React SDK */
+
+.nero-widget-fab {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nero-widget-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+
+.nero-fab-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: white;
+  color: #1a1a1a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nero-widget-panel {
+  position: fixed;
+  width: 400px;
+  height: 600px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nero-widget-panel.dark {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.nero-widget-header {
+  background: linear-gradient(135deg, var(--primary-color, #6366f1), #ec4899);
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nero-header-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex: 1;
+}
+
+.nero-logo {
+  font-size: 2rem;
+}
+
+.nero-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nero-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.nero-nft-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-end;
+}
+
+.nero-level {
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+
+.nero-xp-bar {
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.nero-xp-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.5s ease;
+}
+
+.nero-close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background 0.2s ease;
+  margin-left: 0.5rem;
+}
+
+.nero-close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nero-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #fafafa;
+}
+
+.nero-widget-panel.dark .nero-messages {
+  background: #0f0f0f;
+}
+
+.nero-welcome {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.nero-widget-panel.dark .nero-welcome {
+  color: #999;
+}
+
+.nero-welcome-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.nero-welcome h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+.nero-widget-panel.dark .nero-welcome h3 {
+  color: #ffffff;
+}
+
+.nero-welcome p {
+  font-size: 0.95rem;
+}
+
+.nero-message {
+  max-width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  animation: messageSlide 0.3s ease;
+}
+
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nero-message.user {
+  align-self: flex-end;
+}
+
+.nero-message.assistant {
+  align-self: flex-start;
+}
+
+.nero-message-content {
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.nero-message.user .nero-message-content {
+  background: linear-gradient(135deg, var(--primary-color, #6366f1), #ec4899);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.nero-message.assistant .nero-message-content {
+  background: white;
+  border: 1px solid #e5e5e5;
+  color: #1a1a1a;
+  border-bottom-left-radius: 4px;
+}
+
+.nero-widget-panel.dark .nero-message.assistant .nero-message-content {
+  background: #2a2a2a;
+  border-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.nero-message-time {
+  font-size: 0.75rem;
+  color: #999;
+  padding: 0 0.5rem;
+}
+
+.nero-typing-indicator {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.75rem 1rem;
+}
+
+.nero-typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: #999;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.nero-typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.nero-typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+}
+
+.nero-input-area {
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nero-widget-panel.dark .nero-input-area {
+  background: #1a1a1a;
+  border-top-color: #2a2a2a;
+}
+
+.nero-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.nero-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #6366f1);
+}
+
+.nero-widget-panel.dark .nero-input {
+  background: #2a2a2a;
+  border-color: #3a3a3a;
+  color: white;
+}
+
+.nero-send-button {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-color, #6366f1);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nero-send-button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.nero-send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nero-login-button {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--primary-color, #6366f1), #ec4899);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.nero-login-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .nero-widget-panel {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+  }
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Nero Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-card: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-purple: #6366f1;
+            --accent-pink: #ec4899;
+            --border-color: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 4rem;
+        }
+
+        .pricing-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            background: var(--text-primary);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .pricing-header > div {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .pricing-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pricing-row:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-cell {
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tier-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tier-features {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .feature-card.highlight {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            border: none;
+        }
+
+        .feature-card.highlight h3,
+        .feature-card.highlight p {
+            color: white;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-header,
+            .pricing-row {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="sdk.html">Live SDK</a></li>
+                <li><a href="developers.html">Developers</a></li>
+                <li><a href="pricing.html" class="active">Pricing</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="header-section">
+            <div class="header-icon">📊</div>
+            <h1>PRICING</h1>
+        </div>
+
+        <div class="pricing-table">
+            <div class="pricing-header">
+                <div>TIER</div>
+                <div>PRICE</div>
+                <div>FEATURES</div>
+            </div>
+
+            <div class="pricing-row">
+                <div class="pricing-cell">
+                    <div class="tier-name">FREE DAILY</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-price">10 questions/day</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-features">Basic Q&A, real-time guidance</div>
+                </div>
+            </div>
+
+            <div class="pricing-row">
+                <div class="pricing-cell">
+                    <div class="tier-name">PAY-AS-YOU-GO</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-price">$0.001-0.01/query</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-features">Unlimited questions, on-demand</div>
+                </div>
+            </div>
+
+            <div class="pricing-row">
+                <div class="pricing-cell">
+                    <div class="tier-name">NFT EVOLUTION</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-price">$1-10/level</div>
+                </div>
+                <div class="pricing-cell">
+                    <div class="tier-features">Unlock advanced features</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-Time Settlement</h3>
+                <p>All "Pay-as-You-Go" queries are settled instantly via the x402 protocol, streaming MOVE tokens from your wallet directly to the protocol treasury.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Asset Evolution</h3>
+                <p>Fees paid during learning sessions directly increase the XP of your Nero Agent NFT, permanently increasing its on-chain value and intelligence level.</p>
+            </div>
+
+            <div class="feature-card highlight">
+                <div class="feature-icon">🏛️</div>
+                <h3>Protocol Governance</h3>
+                <p>Higher tier users and high-level NFT holders gain priority access to the Nero DAO and revenue sharing mechanisms within the Movement ecosystem.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

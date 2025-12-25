@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nero Simulator - Live SDK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-card: #f5f5f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-purple: #6366f1;
+            --accent-pink: #ec4899;
+            --border-color: #e5e5e5;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .balance {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .connect-btn, .disconnect-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .connect-btn:hover, .disconnect-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .disconnect-btn {
+            background: #ef4444;
+        }
+
+        /* Platform Selector */
+        .platform-selector {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .platform-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .platforms {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .platform-btn.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .platform-btn:hover:not(.active) {
+            border-color: var(--accent-purple);
+        }
+
+        .platform-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* Payment Modal */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .payment-modal.active {
+            display: flex;
+        }
+
+        .payment-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .payment-content h2 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .payment-info {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .payment-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 1rem 0;
+        }
+
+        .payment-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .payment-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .payment-btn.confirm {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+        }
+
+        .payment-btn.cancel {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .queries-remaining {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* View Tabs */
+        .view-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--accent-purple);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-purple);
+        }
+
+        /* Simulator Layout */
+        .simulator {
+            display: grid;
+            grid-template-columns: 380px 1fr 320px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* NFT Card */
+        .nft-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .nft-visual {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a0e4e 50%, #ec4899 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nft-visual::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(236, 72, 153, 0.3), transparent 50%);
+        }
+
+        .nft-level {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .nft-level span {
+            color: var(--accent-purple);
+        }
+
+        .nft-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-subtitle {
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .xp-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .xp-label {
+            color: var(--text-secondary);
+        }
+
+        .xp-value {
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            animation: messageSlideIn 0.3s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.assistant {
+            background: var(--bg-card);
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            align-self: flex-end;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border-radius: 16px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+
+        .chat-input:disabled {
+            background: var(--bg-card);
+            cursor: not-allowed;
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Wallet Connect Overlay */
+        .wallet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .wallet-overlay.active {
+            display: flex;
+        }
+
+        .wallet-modal {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .wallet-modal h2 {
+            margin-bottom: 1rem;
+        }
+
+        .wallet-modal p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Sync History */
+        .sync-panel {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .sync-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .tx-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tx-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .tx-type {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .network-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .network-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 1024px) {
+            .simulator {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="sdk.html" class="active">Live SDK</a></li>
+                <li><a href="developers.html">Developers</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div class="wallet-info">
+                <span class="network-status" id="networkStatus" style="display: none;">
+                    <span class="network-dot"></span>
+                    Movement M2
+                </span>
+                <span class="queries-remaining" id="queriesRemaining" style="display: none;">
+                    <span>⚡</span>
+                    <span id="freeQueries">10</span> free queries
+                </span>
+                <span class="balance" id="userBalance" style="display: none;">0.000 MOVE</span>
+                <button class="connect-btn" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+                <button class="disconnect-btn" id="disconnectBtn" onclick="disconnectWallet()" style="display: none;">Disconnect</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="platform-selector">
+        <div class="platform-label">Select Platform</div>
+        <div class="platforms">
+            <button class="platform-btn active" onclick="selectPlatform('uniswap')">
+                <img src="assets/logos/uniswap.png" alt="Uniswap" class="platform-icon">
+                Uniswap
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('aave')">
+                <img src="assets/logos/aave.png" alt="Aave" class="platform-icon">
+                Aave
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('movement')">
+                <img src="assets/logos/movement.png" alt="Movement" class="platform-icon">
+                Movement
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Simulator Core</h1>
+            <p>Experience AI-native integration with the Movement ecosystem.</p>
+        </div>
+
+        <div class="view-tabs">
+            <button class="tab active" onclick="switchTab('user')">User View</button>
+            <button class="tab" onclick="switchTab('admin')">Admin Control</button>
+        </div>
+
+        <!-- User View -->
+        <div id="user-view" class="simulator">
+            <div class="nft-card">
+                <div class="card-label">Linked Asset</div>
+                <div class="nft-visual">
+                    <img src="assets/logos/uniswap.png" alt="Uniswap" style="width: 200px; height: 200px; object-fit: contain;">
+                    <div class="nft-level">LVL <span id="nftLevel">1</span></div>
+                </div>
+                <h3 class="nft-title" id="nftTitle">Uniswap x Nero</h3>
+                <p class="nft-subtitle">Verified Movement Asset</p>
+                
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">SYNC PROGRESS</span>
+                        <span style="font-weight: 600; font-size: 0.85rem;" id="xpPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="xp-info">
+                    <div>
+                        <div class="xp-label">XP EARNED</div>
+                        <div class="xp-value" id="xpEarned">0</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="xp-label">XP TARGET</div>
+                        <div class="xp-value" id="xpTarget">500</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        Hello! Uniswap x Nero sentinel active. Connect your wallet to start learning!
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Connect wallet to chat..." disabled>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sync-panel">
+                <div class="sync-header">Sync History</div>
+                <div id="transactionHistory">
+                    <div class="transaction">
+                        <div>
+                            <div class="tx-id">Connect Wallet</div>
+                            <div class="tx-type">to start</div>
+                        </div>
+                        <div class="tx-amount">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" style="display: none;">
+            <div style="background: var(--bg-secondary); padding: 3rem; border-radius: 20px; text-align: center;">
+                <h2 style="margin-bottom: 1rem;">Admin Control Panel</h2>
+                <p style="color: var(--text-secondary);">Configure AI persona, fees, and treasury settings for your dApp integration.</p>
+                <button class="connect-btn" style="margin-top: 2rem;">
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Connect Overlay -->
+    <div class="wallet-overlay" id="walletOverlay">
+        <div class="wallet-modal">
+            <h2>🔐 Connect Your Wallet</h2>
+            <p>Connect with Privy to access Nero AI and earn XP through your learning journey.</p>
+            <button class="connect-btn" onclick="initPrivy()">Connect with Privy</button>
+        </div>
+    </div>
+
+    <!-- Payment Modal for x402 -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <h2>💰 Query Payment Required</h2>
+            <p>You've used all 10 free queries today!</p>
+            
+            <div class="payment-info">
+                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Payment via x402 Protocol</p>
+                <div class="payment-amount">0.001 MOVE</div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Per query · Instant settlement</p>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                ✨ Earn 10 XP with each paid query!
+            </p>
+
+            <div class="payment-buttons">
+                <button class="payment-btn cancel" onclick="cancelPayment()">Cancel</button>
+                <button class="payment-btn confirm" onclick="processPayment()">Pay & Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const MOVEMENT_CONFIG = {
+            chainId: '0x1B1', // 177 in hex (Movement M2 Testnet)
+            chainName: 'Movement M2 Testnet',
+            rpcUrl: 'https://mevm.devnet.imola.movementlabs.xyz',
+            blockExplorer: 'https://explorer.devnet.imola.movementlabs.xyz',
+            nativeCurrency: {
+                name: 'MOVE',
+                symbol: 'MOVE',
+                decimals: 18
+            }
+        };
+
+        // State
+        let currentPlatform = 'uniswap';
+        let walletAddress = null;
+        let xpData = {
+            current: 0,
+            target: 500,
+            level: 1
+        };
+        let freeQueriesRemaining = 10; // Daily free queries
+        let pendingMessage = null; // Store message waiting for payment
+
+        // Platform data with logo paths
+        const platforms = {
+            uniswap: {
+                icon: 'assets/logos/uniswap.png',
+                name: 'Uniswap',
+                description: 'Decentralized token swapping protocol'
+            },
+            aave: {
+                icon: 'assets/logos/aave.png',
+                name: 'Aave',
+                description: 'Decentralized lending and borrowing'
+            },
+            movement: {
+                icon: 'assets/logos/movement.png',
+                name: 'Movement',
+                description: 'High-performance MoveVM L2'
+            }
+        };
+
+        // Wallet Connection
+        async function connectWallet() {
+            document.getElementById('walletOverlay').classList.add('active');
+        }
+
+        async function initPrivy() {
+            try {
+                // Simulate Privy connection
+                // In production, use actual Privy SDK
+                await addMovementNetwork();
+                
+                // Simulate wallet connection
+                walletAddress = '0x' + Math.random().toString(16).substr(2, 40);
+                
+                // Update UI
+                document.getElementById('connectBtn').style.display = 'none';
+                document.getElementById('disconnectBtn').style.display = 'block';
+                document.getElementById('networkStatus').style.display = 'inline-flex';
+                document.getElementById('userBalance').style.display = 'block';
+                document.getElementById('userBalance').textContent = '100.000 MOVE';
+                document.getElementById('queriesRemaining').style.display = 'inline-flex';
+                document.getElementById('walletOverlay').classList.remove('active');
+                
+                // Enable chat
+                document.getElementById('chatInput').disabled = false;
+                document.getElementById('chatInput').placeholder = 'Ask Nero anything...';
+                document.getElementById('sendBtn').disabled = false;
+                
+                // Reset free queries
+                freeQueriesRemaining = 10;
+                updateQueriesDisplay();
+                
+                // Add welcome message
+                addMessage('assistant', `Great! Your wallet is connected. You have ${freeQueriesRemaining} free queries today. I can now help you learn about ${platforms[currentPlatform].name}. What would you like to know?`);
+                
+                // Mint NFT
+                await mintNFT();
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                alert('Failed to connect wallet. Please try again.');
+            }
+        }
+
+        async function addMovementNetwork() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: MOVEMENT_CONFIG.chainId,
+                            chainName: MOVEMENT_CONFIG.chainName,
+                            rpcUrls: [MOVEMENT_CONFIG.rpcUrl],
+                            blockExplorerUrls: [MOVEMENT_CONFIG.blockExplorer],
+                            nativeCurrency: MOVEMENT_CONFIG.nativeCurrency
+                        }]
+                    });
+                } catch (error) {
+                    console.log('Network already added or user rejected');
+                }
+            }
+        }
+
+        function disconnectWallet() {
+            walletAddress = null;
+            freeQueriesRemaining = 10;
+            
+            document.getElementById('connectBtn').style.display = 'block';
+            document.getElementById('disconnectBtn').style.display = 'none';
+            document.getElementById('networkStatus').style.display = 'none';
+            document.getElementById('userBalance').style.display = 'none';
+            document.getElementById('queriesRemaining').style.display = 'none';
+            document.getElementById('chatInput').disabled = true;
+            document.getElementById('chatInput').placeholder = 'Connect wallet to chat...';
+            document.getElementById('sendBtn').disabled = true;
+            
+            // Reset chat
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message assistant">
+                    Hello! Uniswap x Nero sentinel active. Connect your wallet to start learning!
+                </div>
+            `;
+            
+            // Reset XP
+            xpData = { current: 0, target: 500, level: 1 };
+            updateXPDisplay();
+        }
+
+        // NFT Minting
+        async function mintNFT() {
+            addTransaction('MINT', '0.000');
+            updateXPDisplay();
+        }
+
+        // Chat functionality
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message || !walletAddress) return;
+            
+            // Check free queries
+            if (freeQueriesRemaining <= 0) {
+                // Show payment modal
+                pendingMessage = message;
+                showPaymentModal();
+                return;
+            }
+            
+            // Process query
+            processQuery(message);
+        }
+
+        function processQuery(message) {
+            const input = document.getElementById('chatInput');
+            
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response (in production, call Claude API)
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateAIResponse(message);
+                addMessage('assistant', response);
+                
+                // Deduct free query or process payment
+                if (freeQueriesRemaining > 0) {
+                    freeQueriesRemaining--;
+                    updateQueriesDisplay();
+                }
+                
+                // Add XP
+                addXP(10);
+                
+                // Add transaction
+                const txType = freeQueriesRemaining >= 0 ? 'FREE QUERY' : 'PAID QUERY';
+                const txAmount = freeQueriesRemaining >= 0 ? '0.000' : '0.001';
+                addTransaction(txType, txAmount);
+                
+                // Update balance if paid
+                if (freeQueriesRemaining < 0) {
+                    updateBalance(-0.001);
+                }
+            }, 1500);
+        }
+
+        function showPaymentModal() {
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function cancelPayment() {
+            document.getElementById('paymentModal').classList.remove('active');
+            pendingMessage = null;
+        }
+
+        async function processPayment() {
+            // Simulate x402 payment
+            document.getElementById('paymentModal').classList.remove('active');
+            
+            // Show processing message
+            addMessage('assistant', '💳 Processing payment via x402 protocol...');
+            
+            setTimeout(() => {
+                // Payment successful
+                addMessage('assistant', '✅ Payment confirmed! 0.001 MOVE paid. Continuing with your query...');
+                
+                // Process the pending query
+                if (pendingMessage) {
+                    processQuery(pendingMessage);
+                    pendingMessage = null;
+                }
+                
+                // Update balance
+                updateBalance(-0.001);
+                
+                // Add payment transaction
+                addTransaction('x402 PAYMENT', '0.001');
+            }, 1000);
+        }
+
+        function updateQueriesDisplay() {
+            const queriesElem = document.getElementById('freeQueries');
+            if (queriesElem) {
+                queriesElem.textContent = freeQueriesRemaining;
+                
+                // Change color when running low
+                const container = document.getElementById('queriesRemaining');
+                if (freeQueriesRemaining <= 3) {
+                    container.style.background = 'rgba(239, 68, 68, 0.1)';
+                    container.style.color = '#ef4444';
+                } else {
+                    container.style.background = 'rgba(99, 102, 241, 0.1)';
+                    container.style.color = 'var(--accent-purple)';
+                }
+                
+                // Show notification when queries run out
+                if (freeQueriesRemaining === 0) {
+                    addMessage('assistant', '⚠️ You\'ve used all 10 free queries today! Future queries will cost 0.001 MOVE via x402 protocol.');
+                }
+            }
+        }
+
+        function updateBalance(amount) {
+            const balanceElem = document.getElementById('userBalance');
+            if (balanceElem) {
+                const currentBalance = parseFloat(balanceElem.textContent.split(' ')[0]);
+                const newBalance = (currentBalance + amount).toFixed(3);
+                balanceElem.textContent = newBalance + ' MOVE';
+            }
+        }
+
+        function generateAIResponse(message) {
+            const platform = platforms[currentPlatform];
+            const responses = [
+                `Great question about ${platform.name}! ${platform.description}. Here's what you need to know...`,
+                `Let me explain how that works on ${platform.name}. ${platform.description} makes it easy to...`,
+                `That's a common question! On ${platform.name}, you can...`,
+                `${platform.name} is designed to help with exactly that! Here's how...`
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function addMessage(role, content) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.textContent = content;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesDiv = document.getElementById('chatMessages');
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.id = 'typingIndicator';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            messagesDiv.appendChild(indicator);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // XP System
+        function addXP(amount) {
+            xpData.current += amount;
+            
+            // Check for level up
+            if (xpData.current >= xpData.target) {
+                xpData.level++;
+                xpData.current = xpData.current - xpData.target;
+                xpData.target = Math.floor(xpData.target * 1.5);
+                
+                // Show level up animation
+                showLevelUpNotification();
+            }
+            
+            updateXPDisplay();
+        }
+
+        function updateXPDisplay() {
+            const percent = Math.min((xpData.current / xpData.target) * 100, 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('xpPercent').textContent = Math.floor(percent) + '%';
+            document.getElementById('xpEarned').textContent = xpData.current;
+            document.getElementById('xpTarget').textContent = xpData.target;
+            document.getElementById('nftLevel').textContent = xpData.level;
+        }
+
+        function showLevelUpNotification() {
+            addMessage('assistant', `🎉 Congratulations! You've reached Level ${xpData.level}! Your Nero Agent is getting smarter!`);
+        }
+
+        // Transaction History
+        function addTransaction(type, amount) {
+            const historyDiv = document.getElementById('transactionHistory');
+            const txId = 'TX-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+            
+            const txDiv = document.createElement('div');
+            txDiv.className = 'transaction';
+            txDiv.innerHTML = `
+                <div>
+                    <div class="tx-id">${txId}</div>
+                    <div class="tx-type">${type}</div>
+                </div>
+                <div class="tx-amount">-${amount}</div>
+            `;
+            
+            historyDiv.insertBefore(txDiv, historyDiv.firstChild);
+            
+            // Keep only last 5 transactions
+            while (historyDiv.children.length > 5) {
+                historyDiv.removeChild(historyDiv.lastChild);
+            }
+        }
+
+        // Platform Selection
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Update active button
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.platform-btn').classList.add('active');
+            
+            // Update NFT card with logo image
+            const platformData = platforms[platform];
+            document.querySelector('.nft-visual').innerHTML = `
+                <img src="${platformData.icon}" alt="${platformData.name}" style="width: 200px; height: 200px; object-fit: contain;">
+                <div class="nft-level">LVL <span id="nftLevel">${xpData.level}</span></div>
+            `;
+            document.getElementById('nftTitle').textContent = `${platformData.name} x Nero`;
+            
+            if (walletAddress) {
+                addMessage('assistant', `Switched to ${platformData.name}! ${platformData.description}. How can I help you?`);
+            }
+        }
+
+        // Tab Switching
+        function switchTab(view) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (view === 'user') {
+                document.getElementById('user-view').style.display = 'grid';
+                document.getElementById('admin-view').style.display = 'none';
+            } else {
+                document.getElementById('user-view').style.display = 'none';
+                document.getElementById('admin-view').style.display = 'block';
+            }
+        }
+
+        // Enter key to send
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

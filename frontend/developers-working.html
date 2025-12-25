@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers - Nero Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-code: #0d1117;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --accent-purple: #6366f1;
+            --accent-green: #3fb950;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), #ec4899);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-purple);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .main-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .deployment-steps {
+            margin-top: 3rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-purple), #ec4899);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Code Tabs */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .code-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+
+        .code-tab.active {
+            color: var(--accent-purple);
+            border-bottom-color: var(--accent-purple);
+        }
+
+        .code-tab:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* Code Block */
+        .code-window {
+            background: var(--bg-code);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-content {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .code-content.hidden {
+            display: none;
+        }
+
+        .code-line {
+            color: var(--text-secondary);
+        }
+
+        .code-comment {
+            color: #6e7681;
+        }
+
+        .code-tag {
+            color: #7ee787;
+        }
+
+        .code-attr {
+            color: #79c0ff;
+        }
+
+        .code-string {
+            color: #a5d6ff;
+        }
+
+        .code-keyword {
+            color: #ff7b72;
+        }
+
+        .code-function {
+            color: #d2a8ff;
+        }
+
+        .copy-btn {
+            background: var(--accent-purple);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: #5558e3;
+        }
+
+        .copy-btn.copied {
+            background: var(--accent-green);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .doc-link {
+            display: block;
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .doc-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="sdk.html">Live SDK</a></li>
+                <li><a href="developers.html" class="active">Developers</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="header-section">
+            <div class="version-badge">SDK V1.0.4-BETA</div>
+            <h1>DEVELOPER CORE</h1>
+            <p class="subtitle">
+                Integrate Nero's AI-Native Sentinel into your dApp. Provide real-time MoveVM guidance while earning protocol revenue through x402 micro-streams.
+            </p>
+        </div>
+
+        <div class="content-grid">
+            <div class="main-content">
+                <h2>Integration Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>VISUAL BRANDING</h3>
+                        <p>Customize colors, icons, and position to fit seamlessly into your dApp's existing UI components.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>MONETIZATION ENGINE</h3>
+                        <p>Set custom MOVE/USDC fees per query. All payments settle instantly via the x402 protocol.</p>
+                    </div>
+                </div>
+
+                <div class="deployment-steps">
+                    <h2>DEPLOYMENT STEPS</h2>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>CLAIM PLATFORM ID</h3>
+                            <p>Register your project to receive your unique platform key.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>DEFINE AI PERSONA</h3>
+                            <p>Provide your project docs or smart contract ABIs to specialize your Nero Agent.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>MOUNT COMPONENT</h3>
+                            <p>Use our React SDK or simple HTML snippet to activate the live guide.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Examples -->
+                <div class="code-window">
+                    <div class="code-header">
+                        <div class="code-tabs">
+                            <button class="code-tab active" onclick="switchCodeTab('html')">HTML</button>
+                            <button class="code-tab" onclick="switchCodeTab('react')">React</button>
+                            <button class="code-tab" onclick="switchCodeTab('vue')">Vue</button>
+                            <button class="code-tab" onclick="switchCodeTab('config')">Full Config</button>
+                        </div>
+                        <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+                    </div>
+                    
+                    <!-- HTML Example -->
+                    <div class="code-content" id="code-html">
+<pre><code><span class="code-comment">&lt;!-- Step 1: Add Nero SDK --&gt;</span>
+<span class="code-tag">&lt;script</span> <span class="code-attr">src</span>=<span class="code-string">"https://cdn.nero.ai/widget/v1.js"</span><span class="code-tag">&gt;&lt;/script&gt;</span>
+
+<span class="code-comment">&lt;!-- Step 2: Initialize Nero --&gt;</span>
+<span class="code-tag">&lt;script&gt;</span>
+  <span class="code-keyword">window</span>.addEventListener(<span class="code-string">'DOMContentLoaded'</span>, <span class="code-keyword">function</span>() {
+    <span class="code-keyword">const</span> nero = <span class="code-keyword">new</span> <span class="code-function">NeroWidget</span>({
+      <span class="code-attr">platformId</span>: <span class="code-string">'your_platform_id'</span>,
+      <span class="code-attr">theme</span>: <span class="code-string">'light'</span>,
+      <span class="code-attr">primaryColor</span>: <span class="code-string">'#6366f1'</span>,
+      <span class="code-attr">position</span>: <span class="code-string">'bottom-right'</span>,
+      <span class="code-attr">apiEndpoint</span>: <span class="code-string">'https://api.nero.ai/v1'</span>
+    });
+    
+    nero.init();
+  });
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+                    </div>
+
+                    <!-- React Example -->
+                    <div class="code-content hidden" id="code-react">
+<pre><code><span class="code-comment">// Step 1: Install Nero React SDK</span>
+<span class="code-comment">// npm install @nero-protocol/react-sdk</span>
+
+<span class="code-keyword">import</span> React <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { NeroWidget } <span class="code-keyword">from</span> <span class="code-string">'@nero-protocol/react-sdk'</span>;
+<span class="code-keyword">import</span> <span class="code-string">'@nero-protocol/react-sdk/dist/styles.css'</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">App</span>() {
+  <span class="code-keyword">return</span> (
+    <span class="code-tag">&lt;div</span> <span class="code-attr">className</span>=<span class="code-string">"app"</span><span class="code-tag">&gt;</span>
+      <span class="code-comment">{/* Your dApp content */}</span>
+      <span class="code-tag">&lt;h1&gt;</span>My DeFi Protocol<span class="code-tag">&lt;/h1&gt;</span>
+      
+      <span class="code-comment">{/* Nero AI Widget */}</span>
+      <span class="code-tag">&lt;NeroWidget</span>
+        <span class="code-attr">platformId</span>=<span class="code-string">"your_platform_id"</span>
+        <span class="code-attr">theme</span>=<span class="code-string">"light"</span>
+        <span class="code-attr">primaryColor</span>=<span class="code-string">"#6366f1"</span>
+        <span class="code-attr">position</span>=<span class="code-string">"bottom-right"</span>
+        <span class="code-attr">apiEndpoint</span>=<span class="code-string">"https://api.nero.ai/v1"</span>
+        <span class="code-attr">onMessage</span>={(msg) <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'User asked:'</span>, msg)}
+      <span class="code-tag">/&gt;</span>
+    <span class="code-tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="code-keyword">export default</span> App;</code></pre>
+                    </div>
+
+                    <!-- Vue Example -->
+                    <div class="code-content hidden" id="code-vue">
+<pre><code><span class="code-comment">&lt;!-- Step 1: Install Nero Vue SDK --&gt;</span>
+<span class="code-comment">&lt;!-- npm install @nero-protocol/vue-sdk --&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span class="code-string">"app"</span><span class="code-tag">&gt;</span>
+    <span class="code-comment">&lt;!-- Your dApp content --&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>My DeFi Protocol<span class="code-tag">&lt;/h1&gt;</span>
+    
+    <span class="code-comment">&lt;!-- Nero AI Widget --&gt;</span>
+    <span class="code-tag">&lt;NeroWidget</span>
+      <span class="code-attr">:platform-id</span>=<span class="code-string">"'your_platform_id'"</span>
+      <span class="code-attr">:theme</span>=<span class="code-string">"'light'"</span>
+      <span class="code-attr">:primary-color</span>=<span class="code-string">"'#6366f1'"</span>
+      <span class="code-attr">:position</span>=<span class="code-string">"'bottom-right'"</span>
+      <span class="code-attr">:api-endpoint</span>=<span class="code-string">"'https://api.nero.ai/v1'"</span>
+      <span class="code-attr">@message</span>=<span class="code-string">"handleMessage"</span>
+    <span class="code-tag">/&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span>
+
+<span class="code-tag">&lt;script&gt;</span>
+<span class="code-keyword">import</span> { NeroWidget } <span class="code-keyword">from</span> <span class="code-string">'@nero-protocol/vue-sdk'</span>;
+
+<span class="code-keyword">export default</span> {
+  <span class="code-attr">components</span>: {
+    NeroWidget
+  },
+  <span class="code-attr">methods</span>: {
+    <span class="code-function">handleMessage</span>(msg) {
+      console.log(<span class="code-string">'User asked:'</span>, msg);
+    }
+  }
+}
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+                    </div>
+
+                    <!-- Full Config Example -->
+                    <div class="code-content hidden" id="code-config">
+<pre><code><span class="code-comment">// Complete Configuration Options</span>
+
+<span class="code-keyword">const</span> neroConfig = {
+  <span class="code-comment">// Required</span>
+  <span class="code-attr">platformId</span>: <span class="code-string">'your_platform_id'</span>,
+  
+  <span class="code-comment">// Visual Customization</span>
+  <span class="code-attr">theme</span>: <span class="code-string">'light'</span>, <span class="code-comment">// 'light' | 'dark'</span>
+  <span class="code-attr">primaryColor</span>: <span class="code-string">'#6366f1'</span>,
+  <span class="code-attr">position</span>: <span class="code-string">'bottom-right'</span>, <span class="code-comment">// 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'</span>
+  
+  <span class="code-comment">// API Configuration</span>
+  <span class="code-attr">apiEndpoint</span>: <span class="code-string">'https://api.nero.ai/v1'</span>,
+  <span class="code-attr">apiKey</span>: <span class="code-string">'your_api_key'</span>, <span class="code-comment">// Optional for public endpoints</span>
+  
+  <span class="code-comment">// Wallet Integration</span>
+  <span class="code-attr">privy</span>: {
+    <span class="code-attr">appId</span>: <span class="code-string">'your_privy_app_id'</span>,
+    <span class="code-attr">config</span>: {
+      <span class="code-attr">appearance</span>: {
+        <span class="code-attr">theme</span>: <span class="code-string">'light'</span>
+      }
+    }
+  },
+  
+  <span class="code-comment">// Movement Network</span>
+  <span class="code-attr">network</span>: {
+    <span class="code-attr">chainId</span>: 177, <span class="code-comment">// Movement M2 Testnet</span>
+    <span class="code-attr">rpcUrl</span>: <span class="code-string">'https://mevm.devnet.imola.movementlabs.xyz'</span>
+  },
+  
+  <span class="code-comment">// AI Behavior</span>
+  <span class="code-attr">ai</span>: {
+    <span class="code-attr">model</span>: <span class="code-string">'claude-sonnet-4'</span>,
+    <span class="code-attr">temperature</span>: 0.7,
+    <span class="code-attr">systemPrompt</span>: <span class="code-string">'You are an expert guide for...'</span>
+  },
+  
+  <span class="code-comment">// Monetization</span>
+  <span class="code-attr">fees</span>: {
+    <span class="code-attr">enabled</span>: <span class="code-keyword">true</span>,
+    <span class="code-attr">freeQueries</span>: 10, <span class="code-comment">// Per day</span>
+    <span class="code-attr">queryPrice</span>: <span class="code-string">'0.001'</span>, <span class="code-comment">// MOVE tokens</span>
+    <span class="code-attr">treasury</span>: <span class="code-string">'0x...'</span> <span class="code-comment">// Your treasury address</span>
+  },
+  
+  <span class="code-comment">// NFT Agent</span>
+  <span class="code-attr">nft</span>: {
+    <span class="code-attr">enabled</span>: <span class="code-keyword">true</span>,
+    <span class="code-attr">contract</span>: <span class="code-string">'0x...'</span>, <span class="code-comment">// Nero NFT contract</span>
+    <span class="code-attr">autoMint</span>: <span class="code-keyword">true</span>
+  },
+  
+  <span class="code-comment">// Event Callbacks</span>
+  <span class="code-attr">onInit</span>: () <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'Nero initialized'</span>),
+  <span class="code-attr">onWalletConnect</span>: (address) <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'Wallet:'</span>, address),
+  <span class="code-attr">onMessage</span>: (msg) <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'User asked:'</span>, msg),
+  <span class="code-attr">onXPGained</span>: (xp) <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'XP gained:'</span>, xp),
+  <span class="code-attr">onLevelUp</span>: (level) <span class="code-keyword">=&gt;</span> console.log(<span class="code-string">'Level up!'</span>, level)
+};
+
+<span class="code-comment">// Initialize</span>
+<span class="code-keyword">const</span> nero = <span class="code-keyword">new</span> <span class="code-function">NeroWidget</span>(neroConfig);
+nero.init();</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-card">
+                    <h3>🚀 QUICK START</h3>
+                    <p>Get started in 5 minutes with our simple integration</p>
+                    <a href="#" class="doc-link">View Full Documentation →</a>
+                </div>
+
+                <div class="info-card">
+                    <h3>💡 Examples</h3>
+                    <p>Check out live examples and templates</p>
+                    <a href="sdk.html" class="doc-link">Try Live Demo →</a>
+                </div>
+
+                <div class="info-card">
+                    <h3>🤝 Support</h3>
+                    <p>Join our developer community</p>
+                    <a href="#" class="doc-link">Discord Community →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCodeTab = 'html';
+
+        function switchCodeTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.code-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Hide all code blocks
+            document.querySelectorAll('.code-content').forEach(c => {
+                c.classList.add('hidden');
+            });
+
+            // Show selected code block
+            document.getElementById('code-' + tab).classList.remove('hidden');
+            currentCodeTab = tab;
+        }
+
+        function copyCode() {
+            const codeElement = document.getElementById('code-' + currentCodeTab);
+            const code = codeElement.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Nero - AI-Powered Web3 Companion",
+  "version": "1.0.4",
+  "description": "Your AI guide for navigating Web3 and DeFi protocols on Movement Network",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://*.uniswap.org/*",
+    "https://*.aave.com/*",
+    "https://*.movementnetwork.xyz/*",
+    "http://localhost:3001/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.uniswap.org/*",
+        "https://*.aave.com/*",
+        "https://*.movementnetwork.xyz/*"
+      ],
+      "js": ["content.js"],
+      "css": ["nero-widget.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "nero-widget.html",
+        "nero-widget.css",
+        "icons/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

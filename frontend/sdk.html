@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nero Simulator - Live SDK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Privy SDK -->
+    <script src="https://unpkg.com/@privy-io/react-auth@1.46.4/dist/index.umd.js"></script>
+    
+    <!-- Anthropic SDK for AI (using Claude via API) -->
+    <script src="https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.9.1/dist/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-card: #f5f5f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-purple: #6366f1;
+            --accent-pink: #ec4899;
+            --border-color: #e5e5e5;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .balance {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        /* Platform Selector */
+        .platform-selector {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .platform-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .platforms {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .platform-btn.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .platform-btn:hover:not(.active) {
+            border-color: var(--accent-purple);
+        }
+
+        .platform-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* View Tabs */
+        .view-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--accent-purple);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-purple);
+        }
+
+        /* Simulator Layout */
+        .simulator {
+            display: grid;
+            grid-template-columns: 380px 1fr 320px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* NFT Card */
+        .nft-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .nft-visual {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a0e4e 50%, #ec4899 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nft-visual::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(236, 72, 153, 0.3), transparent 50%);
+        }
+
+        .nft-level {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .nft-level span {
+            color: var(--accent-purple);
+        }
+
+        .nft-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-subtitle {
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .xp-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .xp-label {
+            color: var(--text-secondary);
+        }
+
+        .xp-value {
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            animation: messageSlideIn 0.3s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.assistant {
+            background: var(--bg-card);
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Sync History */
+        .sync-panel {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .sync-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .tx-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tx-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .tx-type {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Admin View */
+        .admin-view {
+            display: none;
+        }
+
+        .admin-view.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .simulator {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">📘</div>
+                Nero Protocol
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="sdk.html" class="active">Live SDK</a></li>
+                <li><a href="developers.html">Developers</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span class="balance">0.150 MOVE</span>
+                <button class="cta-button" style="background: transparent; border: 1px solid #e5e5e5; color: #1a1a1a;">Sign Out</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="platform-selector">
+        <div class="platform-label">Select Platform</div>
+        <div class="platforms">
+            <button class="platform-btn active">
+                <span class="platform-icon">🦄</span>
+                Uniswap
+            </button>
+            <button class="platform-btn">
+                <span class="platform-icon">👻</span>
+                Aave
+            </button>
+            <button class="platform-btn">
+                <span class="platform-icon">Ⓜ️</span>
+                Movement
+            </button>
+            <button class="platform-btn">
+                <span class="platform-icon">🌐</span>
+                Ecosystem
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Simulator Core</h1>
+            <p>Validate your AI-native integration across the Movement ecosystem.</p>
+        </div>
+
+        <div class="view-tabs">
+            <button class="tab active" onclick="switchTab('user')">User View</button>
+            <button class="tab" onclick="switchTab('admin')">Admin Control</button>
+        </div>
+
+        <!-- User View -->
+        <div id="user-view" class="simulator">
+            <div class="nft-card">
+                <div class="card-label">Linked Asset</div>
+                <div class="nft-visual">
+                    🦄
+                    <div class="nft-level">LVL <span>1</span></div>
+                </div>
+                <h3 class="nft-title">Uniswap x Nero</h3>
+                <p class="nft-subtitle">Verified Movement Asset</p>
+                
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">SYNC PROGRESS</span>
+                        <span style="font-weight: 600; font-size: 0.85rem;">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="xp-info">
+                    <div>
+                        <div class="xp-label">XP EARNED</div>
+                        <div class="xp-value">0</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="xp-label">XP TARGET</div>
+                        <div class="xp-value">500</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        Hello! Uniswap x Nero sentinel active. I'm ready to help you explore Uniswap. How can I assist?
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask Nero anything...">
+                        <button class="send-btn" onclick="sendMessage()">→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sync-panel">
+                <div class="sync-header">Sync History</div>
+                <div class="transaction">
+                    <div>
+                        <div class="tx-id">TX-VCU4Y</div>
+                        <div class="tx-type">MINT</div>
+                    </div>
+                    <div class="tx-amount">-0.000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="admin-view">
+            <div style="background: var(--bg-secondary); padding: 3rem; border-radius: 20px; text-align: center;">
+                <h2 style="margin-bottom: 1rem;">Admin Control Panel</h2>
+                <p style="color: var(--text-secondary);">Configure AI persona, fees, and treasury settings for your dApp integration.</p>
+                <button class="primary-btn" style="margin-top: 2rem; background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(view) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (view === 'user') {
+                document.getElementById('user-view').style.display = 'grid';
+                document.getElementById('admin-view').classList.remove('active');
+            } else {
+                document.getElementById('user-view').style.display = 'none';
+                document.getElementById('admin-view').classList.add('active');
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.textContent = message;
+            chatMessages.appendChild(userMsg);
+            
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message assistant';
+                aiMsg.textContent = "I understand you're interested in learning more about Uniswap. Let me help you with that!";
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Update XP
+                updateProgress();
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const currentWidth = parseInt(progressFill.style.width) || 0;
+            const newWidth = Math.min(currentWidth + 10, 100);
+            progressFill.style.width = newWidth + '%';
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
